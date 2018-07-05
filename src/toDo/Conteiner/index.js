@@ -6,36 +6,32 @@ export class ToDo extends Component {
     super(props);
     this.state = {
       value: "",
-      list: []
+      list: [],
+      showList: "All"
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChecked = this.handleChecked.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
   }
 
-  handleChange(event) {
+  handleChange = event => {
     this.setState({ value: event.target.value });
-  }
+  };
 
-  handleSubmit(event) {
+  handleSubmit = event => {
     event.preventDefault();
     if (!this.state.value) return;
 
     const newItem = {
       value: this.state.value,
       id: Date.now(),
-      checked: false,
-      hidden: false
+      checked: false
     };
 
     this.setState(prevState => ({
       list: [...prevState.list, newItem],
       value: ""
     }));
-  }
+  };
 
-  handleChecked(id) {
+  handleChecked = id => {
     this.setState(prevState => ({
       list: prevState.list.map(todo => {
         if (todo.id === id) {
@@ -44,27 +40,32 @@ export class ToDo extends Component {
         return todo;
       })
     }));
-  }
-  handleDelete(id) {
+  };
+  handleDelete = id => {
     this.setState(prevState => ({
       list: prevState.list.filter(todo => todo.id !== id)
     }));
-  }
+  };
 
- 
+  sortItem = showValue => {
+    if (showValue === "All") this.setState({ showList: "All" });
+    else this.setState({ showList: "Checked" });
+  };
+
   render() {
     return (
       <div>
         <TodoComponent
           value={this.state.value}
           list={this.state.list}
+          showList={this.state.showList}
           handleChange={this.handleChange}
           handleSubmit={this.handleSubmit}
           handleChecked={this.handleChecked}
           handleDelete={this.handleDelete}
+          sortItem={this.sortItem}
         />
       </div>
     );
+  }
 }
-}
-
